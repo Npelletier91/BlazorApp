@@ -1,0 +1,41 @@
+﻿@page "/todo"
+@rendermode InteractiveServer
+
+
+<h3>Todo (@todos.Count(todo => !todo.IsDone))</h3>
+
+<ul>
+    @for (int i = 0; i < todos.Count; i++)
+    {
+        var localIndex = i;
+        <li>
+            <input type="checkbox" @bind="todos[localIndex].IsDone" />
+            <input @bind="todos[localIndex].Title" />
+            <button @onclick="() => RemoveTodo(localIndex)">X</button>
+        </li>
+    }
+</ul>
+
+<input @bind="newTodo" />
+<button @onclick="AddTodo">Add todo</button>
+
+
+
+@code {
+    private List<TodoItem> todos = new();
+    string newTodo = "";
+
+    void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodo))
+        {
+            todos.Add(new TodoItem { Title = newTodo });
+            newTodo = string.Empty;
+        }
+    }
+    void RemoveTodo(int index)
+    {
+        todos.RemoveAt(index);
+    }
+}
+
